@@ -11,17 +11,11 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Install Dependencies
+      - name: Prepare Theos
         run: |
           sudo apt-get update
-          sudo apt-get install -y git build-essential clang ldid libxml2 libxml2-dev curl
-
-      - name: Setup Theos
-        run: |
+          sudo apt-get install -y git build-essential clang ldid
           git clone --recursive https://github.com/theos/theos.git /home/runner/theos
-          # تحميل الـ SDK الخاص بـ iOS
-          curl -LO https://github.com/theos/sdks/archive/master.tar.gz
-          tar -xf master.tar.gz -C /home/runner/theos/sdks --strip-components=1
 
       - name: Build Tweak
         run: |
