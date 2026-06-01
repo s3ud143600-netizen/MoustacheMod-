@@ -3,8 +3,6 @@ name: Build MoustacheMod
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
   build:
@@ -13,19 +11,21 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Install Theos Dependencies
+      - name: Install Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y git build-essential ldid libxml2 libxml2-dev
+          sudo apt-get install -y git build-essential clang ldid libxml2 libxml2-dev curl
 
       - name: Setup Theos
         run: |
           git clone --recursive https://github.com/theos/theos.git /home/runner/theos
+          # تحميل الـ SDK الخاص بـ iOS
+          curl -LO https://github.com/theos/sdks/archive/master.tar.gz
+          tar -xf master.tar.gz -C /home/runner/theos/sdks --strip-components=1
 
       - name: Build Tweak
-        env:
-          THEOS: /home/runner/theos
         run: |
+          export THEOS=/home/runner/theos
           export PATH=/home/runner/theos/bin:$PATH
           make clean
           make package
