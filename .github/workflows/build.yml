@@ -9,14 +9,24 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/theos/theos:latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Build Tweak
+      - name: Install Theos Dependencies
         run: |
+          sudo apt-get update
+          sudo apt-get install -y git build-essential ldid libxml2 libxml2-dev
+
+      - name: Setup Theos
+        run: |
+          git clone --recursive https://github.com/theos/theos.git /home/runner/theos
+
+      - name: Build Tweak
+        env:
+          THEOS: /home/runner/theos
+        run: |
+          export PATH=/home/runner/theos/bin:$PATH
           make clean
           make package
           
