@@ -61,7 +61,7 @@ static void* get_iohid_func(const char* name) {
             [NSThread sleepForTimeInterval:0.5];
         }
     });
-}
+} 
 @end
 
 // نقطة تشغيل الأداة عند فتح اللعبة
